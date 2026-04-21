@@ -1,0 +1,38 @@
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card fintech-card p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <div class="bg-success-subtle text-success d-inline-flex p-3 rounded-circle mb-3">
+                        <i class="bi bi-envelope-check fs-2"></i>
+                    </div>
+                    <h2 class="fw-bold fs-3">Verify Your Email</h2>
+                    <p class="text-muted">We sent a 6-digit OTP code to <br> <strong class="text-dark">
+                            <%= email %>
+                        </strong></p>
+                </div>
+
+
+
+                <form action="/auth/verify-otp" method="POST">
+                    <input type="hidden" name="email" value="<%= email %>">
+
+                    <div class="mb-4 text-center">
+                        <label for="otp" class="form-label fw-medium text-dark mb-3">Enter the 6-digit
+                            OTP</label>
+                        <input type="text" class="form-control form-control-lg text-center fw-bold letter-spacing-2"
+                            id="otp" name="otp" required maxlength="6" pattern="\d{6}" placeholder="0 0 0 0 0 0"
+                            style="letter-spacing: 0.5rem; font-size: 1.5rem;">
+                    </div>
+
+                    <button class="btn btn-success w-100 py-3 rounded-pill fw-semibold shadow-sm mb-3"
+                        type="submit">Verify & Continue</button>
+                </form>
+                <div class="text-center mt-3">
+                    <small class="text-muted"><i class="bi bi-clock-history me-1"></i> Please check your inbox and spam
+                        folder for the 6-digit OTP.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

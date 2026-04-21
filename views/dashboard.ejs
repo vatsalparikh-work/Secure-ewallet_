@@ -1,0 +1,189 @@
+<div class="container my-5">
+
+    <div class="row align-items-center mb-4">
+        <div class="col-md-6">
+            <h2 class="fw-bold mb-0">Overview</h2>
+            <p class="text-muted mb-0">Welcome back, <%= user.name %>.</p>
+        </div>
+        <div class="col-md-6 text-md-end mt-3 mt-md-0">
+            <button class="btn btn-outline-primary rounded-pill px-4 shadow-sm" data-bs-toggle="modal"
+                data-bs-target="#addMoneyModal">
+                <i class="bi bi-plus-circle me-1"></i> Add Money
+            </button>
+            <a href="/wallet/transfer" class="btn gradient-btn rounded-pill px-4 shadow-sm ms-2">
+                <i class="bi bi-send me-1"></i> Send Money
+            </a>
+        </div>
+    </div>
+
+    <!-- Balance Card -->
+    <div class="row mb-5">
+        <div class="col-lg-6">
+            <div class="card fintech-card bg-primary text-white p-4 position-relative overflow-hidden"
+                style="background: linear-gradient(135deg, #0d6efd 0%, #084298 100%);">
+                <!-- Decorative Circles -->
+                <div class="position-absolute rounded-circle bg-white opacity-10"
+                    style="width: 200px; height: 200px; top: -50px; right: -50px;"></div>
+                <div class="position-absolute rounded-circle bg-white opacity-10"
+                    style="width: 100px; height: 100px; bottom: 20px; right: 80px;"></div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4 position-relative z-1">
+                    <span class="text-uppercase fw-semibold"
+                        style="letter-spacing: 1px; font-size: 0.85rem; opacity: 0.8;">Total Balance</span>
+                    <i class="bi bi-wallet2 fs-4"></i>
+                </div>
+
+                <h1 class="display-4 fw-bold mb-3 position-relative z-1">₹<%= parseFloat(balance).toFixed(2) %>
+                </h1>
+
+                <div class="d-flex align-items-center position-relative z-1">
+                    <div class="me-4">
+                        <small class="d-block" style="opacity: 0.8;">Card Holder</small>
+                        <span class="fw-medium text-uppercase">
+                            <%= user.name %>
+                        </span>
+                    </div>
+                    <div>
+                        <small class="d-block" style="opacity: 0.8;">Status</small>
+                        <span class="fw-medium"><i class="bi bi-shield-check me-1"></i> Verified</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mt-4 mt-lg-0">
+            <div class="card fintech-card h-100 p-4 border-0 bg-light">
+                <h5 class="fw-bold mb-3">Quick Actions</h5>
+                <div class="row g-3">
+                    <div class="col-6">
+                        <a href="/wallet/transfer"
+                            class="card h-100 text-center text-decoration-none shadow-sm fintech-card border-0 py-4 action-card">
+                            <i class="bi bi-arrow-up-right-circle text-primary fs-1 mb-2"></i>
+                            <span class="text-dark fw-medium">Transfer</span>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#addMoneyModal"
+                            class="card h-100 text-center text-decoration-none shadow-sm fintech-card border-0 py-4 action-card">
+                            <i class="bi bi-plus-circle text-success fs-1 mb-2"></i>
+                            <span class="text-dark fw-medium">Deposit</span>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="/wallet/history"
+                            class="card h-100 text-center text-decoration-none shadow-sm fintech-card border-0 py-4 action-card">
+                            <i class="bi bi-receipt text-secondary fs-1 mb-2"></i>
+                            <span class="text-dark fw-medium">History</span>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="/user/profile"
+                            class="card h-100 text-center text-decoration-none shadow-sm fintech-card border-0 py-4 action-card">
+                            <i class="bi bi-gear text-dark fs-1 mb-2"></i>
+                            <span class="text-dark fw-medium">Settings</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Transactions -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-bold mb-0">Recent Transactions</h4>
+        <a href="/wallet/history" class="text-primary text-decoration-none fw-medium">View All</a>
+    </div>
+
+    <div class="card fintech-card border-0 pb-2">
+        <% if (transactions && transactions.length> 0) { %>
+            <div class="list-group list-group-flush border-0">
+                <% transactions.forEach(tx=> { %>
+                    <div
+                        class="list-group-item border-bottom-0 py-3 px-4 d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <% if (tx.type==='DEBIT' ) { %>
+                                <div class="bg-danger-subtle text-danger p-2 rounded-circle me-3 d-flex align-items-center justify-content-center"
+                                    style="width: 45px; height: 45px;">
+                                    <i class="bi bi-arrow-up-right fs-5"></i>
+                                </div>
+                                <% } else { %>
+                                    <div class="bg-success-subtle text-success p-2 rounded-circle me-3 d-flex align-items-center justify-content-center"
+                                        style="width: 45px; height: 45px;">
+                                        <i class="bi bi-arrow-down-left fs-5"></i>
+                                    </div>
+                                    <% } %>
+
+                                        <div>
+                                            <h6 class="mb-0 fw-bold">
+                                                <%= tx.type==='DEBIT' ? 'To' : 'From' %>
+                                                    <%= tx.otherParty %>
+                                            </h6>
+                                            <small class="text-muted">
+                                                <%= new Date(tx.date).toLocaleDateString() %> • <%= tx.note || 'No note'
+                                                        %>
+                                            </small>
+                                        </div>
+                        </div>
+                        <div class="text-end">
+                            <h6 class="mb-0 fw-bold <%= tx.type === 'DEBIT' ? 'text-dark' : 'text-success' %>">
+                                <%= tx.type==='DEBIT' ? '-' : '+' %>₹<%= parseFloat(tx.amount).toFixed(2) %>
+                            </h6>
+                            <span class="badge bg-light text-dark fw-normal mt-1">
+                                <%= tx.status %>
+                            </span>
+                        </div>
+                    </div>
+                    <% }) %>
+            </div>
+            <% } else { %>
+                <div class="text-center py-5 text-muted">
+                    <i class="bi bi-inbox fs-1 d-block mb-3 opacity-50"></i>
+                    <p>No recent transactions found.</p>
+                    <a href="/wallet/transfer" class="btn btn-sm btn-outline-primary mt-2">Make your first
+                        transfer</a>
+                </div>
+                <% } %>
+    </div>
+</div>
+
+<!-- Add Money Modal -->
+<div class="modal fade" id="addMoneyModal" tabindex="-1" aria-labelledby="addMoneyLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-bottom-0 pb-0">
+                <h5 class="modal-title fw-bold" id="addMoneyLabel">Deposit Funds</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/wallet/add" method="POST">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-bank text-primary fs-1"></i>
+                        <p class="text-muted small mt-2">Simulate an instant bank deposit</p>
+                    </div>
+                    <div class="input-group input-group-lg mb-4">
+                        <span class="input-group-text bg-white border-end-0 text-muted fw-bold">₹</span>
+                        <input type="number" step="0.01" min="1"
+                            class="form-control border-start-0 fw-bold fs-4 shadow-none" name="amount"
+                            placeholder="0.00" required>
+                    </div>
+                    <button type="submit" class="btn gradient-btn w-100 py-3 rounded-pill fw-semibold shadow-sm">Confirm
+                        Deposit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .action-card {
+        transition: all 0.2s;
+    }
+
+    .action-card:hover {
+        transform: translateY(-5px);
+        background-color: #f8f9fa !important;
+    }
+
+    .list-group-item:hover {
+        background-color: #f8f9fa;
+    }
+</style>

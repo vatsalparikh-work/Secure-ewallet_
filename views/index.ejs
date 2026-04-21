@@ -1,0 +1,650 @@
+<!-- Premium Next-Generation Front Page UI -->
+<style>
+    /* Override global body and navbar for the dark premium landing page *ONLY* on this route */
+    body {
+        background-color: #050505 !important;
+        color: #e2e8f0;
+        overflow-x: hidden;
+    }
+
+    /* Navbar overrides for dark theme */
+    .navbar {
+        background: rgba(5, 5, 5, 0.7) !important;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+        transition: all 0.3s ease;
+    }
+
+    .navbar-brand {
+        color: #f8fafc !important;
+        text-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+    }
+
+    .navbar-brand i {
+        color: #38bdf8 !important;
+    }
+
+    .nav-link {
+        color: #cbd5e1 !important;
+        transition: color 0.3s ease;
+    }
+
+    .nav-link:hover {
+        color: #fff !important;
+    }
+
+    .navbar .btn-light {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: #fff !important;
+        backdrop-filter: blur(10px);
+    }
+
+    .navbar .btn-light:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    }
+
+    .gradient-btn {
+        background: linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
+    }
+
+    /* Core Layout Elements */
+    .hero-section {
+        position: relative;
+        min-height: 90vh;
+        display: flex;
+        align-items: center;
+        padding: 6rem 0;
+        overflow: hidden;
+    }
+
+    /* Animated Gradients */
+    .glow-orb-1 {
+        position: absolute;
+        top: -10%;
+        right: -5%;
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+        border-radius: 50%;
+        filter: blur(60px);
+        animation: orbFloat 20s infinite ease-in-out alternate;
+        z-index: 0;
+    }
+
+    .glow-orb-2 {
+        position: absolute;
+        bottom: -20%;
+        left: -10%;
+        width: 800px;
+        height: 800px;
+        background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+        border-radius: 50%;
+        filter: blur(80px);
+        animation: orbFloat 25s infinite ease-in-out alternate-reverse;
+        z-index: 0;
+    }
+
+    @keyframes orbFloat {
+        0% {
+            transform: translate(0, 0) scale(1);
+        }
+
+        50% {
+            transform: translate(-30px, 50px) scale(1.1);
+        }
+
+        100% {
+            transform: translate(50px, -30px) scale(0.9);
+        }
+    }
+
+    .content-wrapper {
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Typography */
+    .hero-title {
+        font-size: 4.5rem;
+        font-weight: 800;
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        margin-bottom: 1.5rem;
+    }
+
+    .text-gradient {
+        background: linear-gradient(to right, #fff, #94a3b8);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .text-gradient-accent {
+        background: linear-gradient(135deg, #38bdf8 0%, #8b5cf6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .hero-subtitle {
+        font-size: 1.25rem;
+        color: #94a3b8;
+        font-weight: 400;
+        line-height: 1.7;
+        max-width: 540px;
+        margin-bottom: 2.5rem;
+    }
+
+    /* UI Badge */
+    .premium-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 100px;
+        margin-bottom: 2rem;
+        backdrop-filter: blur(10px);
+    }
+
+    .premium-badge-dot {
+        width: 8px;
+        height: 8px;
+        background: #10b981;
+        border-radius: 50%;
+        margin-right: 8px;
+        box-shadow: 0 0 10px #10b981;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+        }
+
+        70% {
+            transform: scale(1);
+            box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+        }
+
+        100% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+        }
+    }
+
+    /* Buttons */
+    .btn-premium-primary {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+        border: none;
+        padding: 1rem 2.5rem;
+        border-radius: 100px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.5);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-premium-primary::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: all 0.5s ease;
+    }
+
+    .btn-premium-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 35px -5px rgba(37, 99, 235, 0.6);
+        color: white;
+    }
+
+    .btn-premium-primary:hover::after {
+        left: 100%;
+    }
+
+    .btn-premium-secondary {
+        background: rgba(255, 255, 255, 0.03);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1rem 2.5rem;
+        border-radius: 100px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-premium-secondary:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        color: #fff;
+    }
+
+    /* 3D Glass Card Elements */
+    .card-scene {
+        perspective: 1000px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        position: relative;
+    }
+
+    .glass-card-3d {
+        width: 420px;
+        height: 265px;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.03) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-right: 1px solid rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 24px;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        transform-style: preserve-3d;
+        transform: rotateY(-15deg) rotateX(10deg);
+        animation: cardFloat 6s ease-in-out infinite;
+        position: relative;
+        z-index: 10;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    @keyframes cardFloat {
+
+        0%,
+        100% {
+            transform: rotateY(-15deg) rotateX(10deg) translateY(0);
+        }
+
+        50% {
+            transform: rotateY(-12deg) rotateX(12deg) translateY(-20px);
+        }
+    }
+
+    .card-chip {
+        width: 50px;
+        height: 35px;
+        background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+        border-radius: 6px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-chip::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 1px;
+        background: rgba(0, 0, 0, 0.2);
+        top: 50%;
+    }
+
+    .card-number {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 1.6rem;
+        letter-spacing: 4px;
+        color: rgba(255, 255, 255, 0.9);
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Floating UI Components */
+    .floating-ui {
+        position: absolute;
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        padding: 12px 20px;
+        border-radius: 16px;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        z-index: 15;
+    }
+
+    .f-ui-1 {
+        top: 10%;
+        right: -5%;
+        animation: float 5s ease-in-out infinite;
+    }
+
+    .f-ui-2 {
+        bottom: 15%;
+        left: -15%;
+        animation: float 4s ease-in-out infinite reverse;
+    }
+
+    .f-icon-box {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .bg-gradient-success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    }
+
+    /* Features Section */
+    .features-section {
+        padding: 8rem 0;
+        position: relative;
+        z-index: 2;
+        background: linear-gradient(180deg, #050505 0%, #0a0a0a 100%);
+    }
+
+    .feature-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        padding: 40px 30px;
+        transition: all 0.4s ease;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.1) 0%, transparent 60%);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-10px);
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .feature-card:hover::before {
+        opacity: 1;
+    }
+
+    .feature-icon-wrapper {
+        width: 70px;
+        height: 70px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.05);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 25px;
+        font-size: 30px;
+        color: #38bdf8;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: all 0.4s ease;
+    }
+
+    .feature-card:hover .feature-icon-wrapper {
+        transform: scale(1.1) rotate(5deg);
+        background: rgba(56, 189, 248, 0.1);
+        border-color: rgba(56, 189, 248, 0.3);
+        color: #38bdf8;
+        box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+    }
+
+    .feature-card h4 {
+        color: #f8fafc;
+        font-weight: 700;
+        font-size: 1.4rem;
+        margin-bottom: 15px;
+    }
+
+    .feature-card p {
+        color: #94a3b8;
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 0;
+    }
+
+    /* Media Queries */
+    @media (max-width: 991px) {
+        .hero-title {
+            font-size: 3.5rem;
+        }
+
+        .glass-card-3d {
+            width: 340px;
+            height: 215px;
+        }
+
+        .hero-section {
+            text-align: center;
+        }
+
+        .hero-subtitle {
+            margin: 0 auto 2.5rem;
+        }
+
+        .btn-wrapper {
+            justify-content: center;
+        }
+
+        .f-ui-1 {
+            right: 0;
+            top: 0;
+        }
+
+        .f-ui-2 {
+            left: 0;
+            bottom: 0;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2.8rem;
+        }
+
+        .card-scene {
+            margin-top: 4rem;
+            margin-bottom: 2rem;
+        }
+
+        .f-ui-1,
+        .f-ui-2 {
+            display: none;
+        }
+    }
+</style>
+
+<div class="container-fluid p-0">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <!-- Background Ambient Glows -->
+        <div class="glow-orb-1"></div>
+        <div class="glow-orb-2"></div>
+
+        <div class="container content-wrapper">
+            <div class="row align-items-center">
+
+                <!-- Left Content -->
+                <div class="col-lg-6 mb-5 mb-lg-0 pe-lg-5">
+                    <div class="premium-badge">
+                        <span class="premium-badge-dot"></span>
+                        <span class="text-white text-opacity-75 small fw-semibold tracking-wide">SYSTEM V3.0 ONLINE
+                            &middot; MILITARY-GRADE</span>
+                    </div>
+
+                    <h1 class="hero-title">
+                        <span class="text-gradient">The Next Era of</span><br>
+                        <span class="text-gradient-accent">Digital Wealth</span>
+                    </h1>
+
+                    <p class="hero-subtitle">
+                        Experience frictionless, instantaneous global transactions secured by state-of-the-art AES-256
+                        quantum-resistant architecture. Your keys, your dominion.
+                    </p>
+
+                    <div class="d-flex flex-column flex-sm-row gap-3 btn-wrapper">
+                        <a href="/auth/register" class="btn btn-premium-primary">
+                            Initialize Account
+                        </a>
+                        <a href="/auth/login" class="btn btn-premium-secondary">
+                            Access Portal <i class="bi bi-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+
+                    <div class="mt-5 d-flex align-items-center gap-4 text-white text-opacity-50 small fw-medium">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-shield-check text-success fs-5 me-2"></i> Zero Setup Fees
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-lightning-charge text-warning fs-5 me-2"></i> Instant KYB/KYC
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Content (3D Cards) -->
+                <div class="col-lg-6">
+                    <div class="card-scene">
+                        <!-- Floating Verification UI -->
+                        <div class="floating-ui f-ui-1">
+                            <div class="f-icon-box bg-gradient-success">
+                                <i class="bi bi-check2-all text-white fs-5"></i>
+                            </div>
+                            <div>
+                                <div class="text-white text-opacity-50" style="font-size: 0.75rem; font-weight: 600;">
+                                    ENCRYPTED TRANSFER</div>
+                                <div class="text-white fw-bold">+ ₹8,450.00</div>
+                            </div>
+                        </div>
+
+                        <!-- Floating Security UI -->
+                        <div class="floating-ui f-ui-2">
+                            <div class="f-icon-box bg-gradient-primary">
+                                <i class="bi bi-fingerprint text-white fs-5"></i>
+                            </div>
+                            <div>
+                                <div class="text-white text-opacity-50" style="font-size: 0.75rem; font-weight: 600;">
+                                    BIOMETRIC LOCK</div>
+                                <div class="text-white fw-bold">Active</div>
+                            </div>
+                        </div>
+
+                        <!-- Main Glass Card -->
+                        <div class="glass-card-3d">
+                            <!-- Network Logo & Contactless -->
+                            <div class="d-flex justify-content-between align-items-center w-100">
+                                <div class="fs-4 fw-bold text-white tracking-widest" style="letter-spacing: 2px;">SECURE
+                                </div>
+                                <i class="bi bi-wifi fs-3 text-white text-opacity-75"
+                                    style="transform: rotate(90deg);"></i>
+                            </div>
+
+                            <!-- Chip -->
+                            <div class="card-chip mt-2"></div>
+
+                            <!-- Card Number -->
+                            <div class="card-number mt-4">
+                                **** **** **** 9024
+                            </div>
+
+                            <!-- Name & Logo -->
+                            <div class="d-flex justify-content-between align-items-end mt-2 w-100">
+                                <div>
+                                    <div class="text-white text-opacity-50 text-uppercase"
+                                        style="font-size: 0.65rem; letter-spacing: 1px;">Authorized User</div>
+                                    <div class="text-white fw-semibold" style="letter-spacing: 1px;">ALEXANDER WRIGHT
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="fs-2 fw-bolder fst-italic text-white">VISA</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Shadow for 3D card -->
+                        <div
+                            style="position: absolute; bottom: -30px; left: 50%; transform: translateX(-50%); width: 300px; height: 30px; background: rgba(0,0,0,0.5); filter: blur(20px); border-radius: 50%;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Capabilities Section -->
+    <section class="features-section border-top border-secondary border-opacity-10">
+        <div class="container">
+            <div class="text-center mb-5 pb-4">
+                <span class="text-info fw-bold text-uppercase pb-2 d-block"
+                    style="letter-spacing: 2px; font-size: 0.85rem;">Infrastructure</span>
+                <h2 class="display-5 fw-bold text-white mb-3">Industry-Grade Capabilities</h2>
+                <p class="text-white text-opacity-50 mx-auto" style="max-width: 600px; font-size: 1.1rem;">
+                    Engineered from the ground up to provide seamless liquidity management without compromising on
+                    absolute mathematical security.
+                </p>
+            </div>
+
+            <div class="row g-4">
+                <!-- Card 1 -->
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i class="bi bi-wallet2"></i>
+                        </div>
+                        <h4>Instant Transfers</h4>
+                        <p>Send and receive money seamlessly. Our optimized platform ensures your transactions are
+                            processed immediately, keeping your funds accessible.</p>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper" style="color: #10b981;">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h4>Bank-Level Security</h4>
+                        <p>Your data and funds are protected by industry-standard AES-256 encryption. We enforce
+                            transaction PINs and rigorous authentication protocols.</p>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper" style="color: #a855f7;">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+                        <h4>Real-time Tracking</h4>
+                        <p>Monitor your financial activity instantly. Access detailed transaction histories and manage
+                            your profile settings all from an intuitive dashboard.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

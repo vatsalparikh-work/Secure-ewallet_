@@ -1,0 +1,192 @@
+<div class="container my-5">
+    <div class="row mb-4 align-items-center">
+        <div class="col-md-6">
+            <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between mb-0 w-100">
+                <div class="d-flex align-items-center mb-3 mb-sm-0">
+                    <a href="/dashboard" class="btn btn-light rounded-circle me-3"><i class="bi bi-arrow-left"></i></a>
+                    <h3 class="fw-bold mb-0">Transaction History</h3>
+                </div>
+                <div>
+                    <a href="/wallet/history/pdf?type=<%= filter %>&fromDate=<%= locals.fromDate || '' %>&toDate=<%= locals.toDate || '' %>"
+                        class="btn btn-outline-primary rounded-pill px-4 shadow-sm d-flex align-items-center gap-2">
+                        <i class="bi bi-file-earmark-pdf-fill"></i> Download PDF
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mt-3 mt-md-0 text-md-end">
+            <!-- Filters -->
+            <div class="btn-group bg-white p-1 rounded-pill shadow-sm border" role="group">
+                <a href="/wallet/history?type=all"
+                    class="btn rounded-pill <%= filter === 'all' ? 'btn-primary' : 'btn-light text-muted' %> fw-medium px-4">All</a>
+                <a href="/wallet/history?type=credit"
+                    class="btn rounded-pill <%= filter === 'credit' ? 'btn-success' : 'btn-light text-muted' %> fw-medium px-3">Credits</a>
+                <a href="/wallet/history?type=debit"
+                    class="btn rounded-pill <%= filter === 'debit' ? 'btn-danger' : 'btn-light text-muted' %> fw-medium px-3">Debits</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Date Filter Form -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card fintech-card border-0 p-3 shadow-sm rounded-4">
+                <form action="/wallet/history" method="GET" class="row g-3 align-items-end">
+                    <input type="hidden" name="type" value="<%= filter %>">
+                    <div class="col-md-5">
+                        <label for="fromDate" class="form-label small fw-medium text-muted mb-1">From Date</label>
+                        <input type="date" class="form-control bg-light border-0 px-3 py-2" id="fromDate"
+                            name="fromDate" value="<%= locals.fromDate || '' %>">
+                    </div>
+                    <div class="col-md-5">
+                        <label for="toDate" class="form-label small fw-medium text-muted mb-1">To Date</label>
+                        <input type="date" class="form-control bg-light border-0 px-3 py-2" id="toDate" name="toDate"
+                            value="<%= locals.toDate || '' %>">
+                    </div>
+                    <div class="col-md-2 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary w-100 py-2 rounded-3"><i
+                                class="bi bi-search"></i></button>
+                        <a href="/wallet/history?type=<%= filter %>" class="btn btn-light py-2 rounded-3"
+                            title="Clear Filters"><i class="bi bi-x-circle"></i></a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="card fintech-card border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0 filter-table">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="py-3 px-4 fw-semibold text-muted text-uppercase small">Transaction</th>
+                            <th class="py-3 fw-semibold text-muted text-uppercase small">Note / Ref</th>
+                            <th class="py-3 fw-semibold text-muted text-uppercase small">Date & Time</th>
+                            <th class="py-3 fw-semibold text-muted text-uppercase small">Status</th>
+                            <th class="py-3 px-4 fw-semibold text-muted text-uppercase small text-end">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (transactions && transactions.length> 0) { %>
+                            <% transactions.forEach(tx=> { %>
+                                <tr>
+                                    <td class="px-4 py-3">
+                                        <div class="d-flex align-items-center">
+                                            <% if (tx.type==='DEBIT' ) { %>
+                                                <div class="bg-danger-subtle text-danger p-2 rounded-circle me-3 d-flex align-items-center justify-content-center"
+                                                    style="width: 40px; height: 40px;">
+                                                    <i class="bi bi-arrow-up-right"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-bold mb-0">Transfer to</div>
+                                                    <small class="text-muted">
+                                                        <%= tx.otherParty %>
+                                                    </small>
+                                                </div>
+                                                <% } else { %>
+                                                    <div class="bg-success-subtle text-success p-2 rounded-circle me-3 d-flex align-items-center justify-content-center"
+                                                        style="width: 40px; height: 40px;">
+                                                        <i class="bi bi-arrow-down-left"></i>
+                                                    </div>
+                                                    <div>
+                                                        <div class="fw-bold mb-0">Received from</div>
+                                                        <small class="text-muted">
+                                                            <%= tx.otherParty %>
+                                                        </small>
+                                                    </div>
+                                                    <% } %>
+                                        </div>
+                                    </td>
+                                    <td class="py-3 text-muted">
+                                        <div class="text-truncate" style="max-width: 200px;" title="<%= tx.note %>">
+                                            <% if(tx.note) { %>
+                                                <i class="bi bi-chat-left-text me-1"></i>
+                                                <%= tx.note %>
+                                                    <% } else { %>
+                                                        -
+                                                        <% } %>
+                                        </div>
+                                        <small class="text-muted" style="font-size:0.7rem">ID: TXN-<%= tx.id %>
+                                        </small>
+                                    </td>
+                                    <td class="py-3">
+                                        <div class="fw-medium text-dark">
+                                            <%= new Date(tx.date).toLocaleDateString() %>
+                                        </div>
+                                        <small class="text-muted">
+                                            <%= new Date(tx.date).toLocaleTimeString([], {hour: '2-digit' ,
+                                                minute:'2-digit'}) %>
+                                        </small>
+                                    </td>
+                                    <td class="py-3">
+                                        <% if(tx.status==='COMPLETED' ) { %>
+                                            <span
+                                                class="badge bg-success-subtle text-success border border-success px-2 py-1 rounded-pill"><i
+                                                    class="bi bi-check2 me-1"></i>Completed</span>
+                                            <% } else if(tx.status==='FAILED' ) { %>
+                                                <span
+                                                    class="badge bg-danger-subtle text-danger border border-danger px-2 py-1 rounded-pill"><i
+                                                        class="bi bi-x me-1"></i>Failed</span>
+                                                <% } else { %>
+                                                    <span
+                                                        class="badge bg-warning-subtle text-warning border border-warning px-2 py-1 rounded-pill"><i
+                                                            class="bi bi-clock me-1"></i>Pending</span>
+                                                    <% } %>
+                                    </td>
+                                    <td class="px-4 py-3 text-end">
+                                        <h6
+                                            class="mb-0 fw-bold <%= tx.type === 'DEBIT' ? 'text-dark' : 'text-success' %>">
+                                            <%= tx.type==='DEBIT' ? '-' : '+' %>₹<%= parseFloat(tx.amount).toFixed(2) %>
+                                        </h6>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="5" class="text-center py-5 text-muted">
+                                                <i class="bi bi-journal-x fs-1 opacity-50 d-block mb-3"></i>
+                                                <h5>No transactions found</h5>
+                                                <p>Your transaction history for this filter is empty.</p>
+                                            </td>
+                                        </tr>
+                                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pagination -->
+<% if (transactions && transactions.length> 0 && locals.totalPages && locals.totalPages > 1) { %>
+    <div class="d-flex justify-content-center mt-5">
+        <nav aria-label="Transaction history pagination">
+            <ul class="pagination pagination-md shadow-sm rounded-pill overflow-hidden">
+                <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                    <a class="page-link px-4 fw-medium text-dark bg-white border-0"
+                        href="/wallet/history?type=<%= filter %>&fromDate=<%= locals.fromDate || '' %>&toDate=<%= locals.toDate || '' %>&page=<%= currentPage - 1 %>">Previous</a>
+                </li>
+                <% for(let i=1; i <=totalPages; i++) { %>
+                    <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                        <a class="page-link border-0 <%= currentPage === i ? 'bg-primary text-white' : 'text-dark bg-white' %> px-3 rounded-circle mx-1 fw-bold"
+                            href="/wallet/history?type=<%= filter %>&fromDate=<%= locals.fromDate || '' %>&toDate=<%= locals.toDate || '' %>&page=<%= i %>">
+                            <%= i %>
+                        </a>
+                    </li>
+                    <% } %>
+                        <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                            <a class="page-link px-4 fw-medium text-dark bg-white border-0"
+                                href="/wallet/history?type=<%= filter %>&fromDate=<%= locals.fromDate || '' %>&toDate=<%= locals.toDate || '' %>&page=<%= currentPage + 1 %>">Next</a>
+                        </li>
+            </ul>
+        </nav>
+    </div>
+    <% } %>
+        </div>
+
+        <style>
+            .filter-table tbody tr:hover td {
+                background-color: #f8f9fa;
+            }
+        </style>

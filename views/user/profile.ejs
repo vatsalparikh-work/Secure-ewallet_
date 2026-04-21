@@ -1,0 +1,281 @@
+<div class="container my-5">
+    <div class="row">
+        <!-- Profile info column -->
+        <div class="col-lg-4 mb-4">
+            <div class="card fintech-card border-0 text-center p-4">
+                <div class="mx-auto bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center mb-3 fw-bold fs-1 position-relative"
+                    style="width: 100px; height: 100px;">
+                    <% if(userProfile.profile_photo) { %>
+                        <img src="<%= userProfile.profile_photo %>" alt="Profile Photo" class="rounded-circle shadow-sm"
+                            style="width: 100px; height: 100px; object-fit: cover;">
+                        <% } else { %>
+                            <%= userProfile.name.charAt(0).toUpperCase() %>
+                                <% } %>
+                                    <!-- Edit Photo Overlay -->
+                                    <button
+                                        class="btn btn-primary d-flex align-items-center justify-content-center rounded-circle position-absolute bottom-0 end-0 shadow border-0"
+                                        data-bs-toggle="modal" data-bs-target="#photoModal"
+                                        style="width: 32px; height: 32px; padding: 0;">
+                                        <i class="bi bi-camera-fill" style="font-size: 0.9rem;"></i>
+                                    </button>
+                </div>
+                <h4 class="fw-bold mb-1">
+                    <%= userProfile.name %>
+                </h4>
+                <p class="text-muted"><i class="bi bi-shield-check text-success me-1"></i>
+                    <%= __('Verified Account') %>
+                </p>
+
+                <hr class="my-4 text-muted">
+
+                <div class="text-start">
+                    <div class="mb-3">
+                        <small class="text-uppercase text-muted fw-bold" style="font-size: 0.75rem;">
+                            <%= __('Email Address') %>
+                        </small>
+                        <div class="fw-medium">
+                            <%= userProfile.email %>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-uppercase text-muted fw-bold" style="font-size: 0.75rem;">
+                            <%= __('Mobile Number') %>
+                        </small>
+                        <div class="fw-medium">
+                            <%= userProfile.phone %>
+                        </div>
+                    </div>
+                    <div class="mb-3 d-flex justify-content-between align-items-center">
+                        <div>
+                            <small class="text-uppercase text-muted fw-bold" style="font-size: 0.75rem;">
+                                <%= __('Location') %>
+                            </small>
+                            <div class="fw-medium">
+                                <%= userProfile.location || 'Not provided' %>
+                            </div>
+                        </div>
+                        <button class="btn btn-sm btn-link text-primary p-0 text-decoration-none" data-bs-toggle="modal"
+                            data-bs-target="#locationModal">
+                            <i class="bi bi-pencil-square"></i> Edit
+                        </button>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-uppercase text-muted fw-bold" style="font-size: 0.75rem;">
+                            <%= __('Joined On') %>
+                        </small>
+                        <div class="fw-medium">
+                            <%= new Date(userProfile.createdAt).toLocaleDateString() %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings column -->
+        <div class="col-lg-8">
+
+            <!-- Security Settings Card -->
+            <div class="card fintech-card border-0 p-4 p-md-5 mb-4">
+                <h4 class="fw-bold mb-4 border-bottom pb-3"><i class="bi bi-shield-lock text-primary me-2"></i>
+                    <%= __('Security Settings') %>
+                </h4>
+
+                <div class="d-flex align-items-center justify-content-between mb-4 bg-light p-3 rounded-3 border">
+                    <div>
+                        <h6 class="fw-bold mb-1">
+                            <%= __('Transaction PIN') %>
+                        </h6>
+                        <p class="text-muted small mb-0">
+                            <%= hasPin ? 'Your 6-digit PIN is set. You need it to authorize transfers.'
+                                : 'You have not set a transaction PIN. Please set it to enable transfers.' %>
+                        </p>
+                    </div>
+                    <div>
+                        <% if(hasPin) { %>
+                            <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill"><i
+                                    class="bi bi-check-circle-fill me-1"></i> Set</span>
+                            <% } else { %>
+                                <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill"><i
+                                        class="bi bi-exclamation-triangle-fill me-1"></i> Not Set</span>
+                                <% } %>
+                    </div>
+                </div>
+
+                <form action="/user/pin" method="POST">
+                    <% if (hasPin) { %>
+                        <div class="mb-3">
+                            <label class="form-label fw-medium small">Current PIN</label>
+                            <input type="password" name="currentPin" class="form-control bg-light" required
+                                maxlength="6" pattern="\d{6}" placeholder="Enter current 6-digit PIN">
+                        </div>
+                        <% } %>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-medium small">
+                                        <%= hasPin ? 'New PIN' : 'Set New PIN' %>
+                                    </label>
+                                    <input type="password" name="newPin" class="form-control bg-light" required
+                                        maxlength="6" pattern="\d{6}" placeholder="Enter 6-digit PIN">
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label fw-medium small">Confirm PIN</label>
+                                    <input type="password" name="confirmPin" class="form-control bg-light" required
+                                        maxlength="6" pattern="\d{6}" placeholder="Confirm 6-digit PIN">
+                                </div>
+                            </div>
+
+                            <div class="text-end">
+                                <button type="submit" class="btn gradient-btn rounded-pill px-4 shadow-sm">
+                                    <i class="bi bi-save me-1"></i>
+                                    <%= hasPin ? 'Update PIN' : 'Save PIN' %>
+                                </button>
+                            </div>
+                </form>
+            </div>
+
+            <div class="text-center text-muted small mt-2">
+                <i class="bi bi-info-circle me-1"></i> Your password securely hashes your PIN using bcrypt (12
+                rounds min.)
+            </div>
+
+            <!-- Change Password Card -->
+            <div class="card fintech-card border-0 p-4 p-md-5 mt-4 mb-4">
+                <h4 class="fw-bold mb-4 border-bottom pb-3"><i class="bi bi-key text-primary me-2"></i>
+                    <%= __('Change Password') %>
+                </h4>
+
+                <form action="/user/password" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label fw-medium small">Current Password</label>
+                        <input type="password" name="currentPassword" class="form-control bg-light" required
+                            placeholder="Enter current password">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-medium small">New Password</label>
+                            <input type="password" name="newPassword" class="form-control bg-light" required
+                                minlength="6" placeholder="Enter new password">
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label fw-medium small">Confirm Password</label>
+                            <input type="password" name="confirmPassword" class="form-control bg-light" required
+                                minlength="6" placeholder="Confirm new password">
+                        </div>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn gradient-btn rounded-pill px-4 shadow-sm">
+                            <i class="bi bi-save me-1"></i>
+                            <%= __('Change Password') %>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Personalization Settings Card -->
+            <div class="card fintech-card border-0 p-4 p-md-5 mt-4 mb-4">
+                <h4 class="fw-bold mb-4 border-bottom pb-3"><i class="bi bi-palette text-primary me-2"></i>
+                    <%= __('Personalization Settings') %>
+                </h4>
+
+                <form action="/user/preferences" method="POST">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-medium small">
+                                <%= __('Theme') %>
+                            </label>
+                            <select name="theme" class="form-select bg-light">
+                                <option value="light" <%=userTheme==='light' ? 'selected' : '' %>><%= __('Light Mode')
+                                        %>
+                                </option>
+                                <option value="dark" <%=userTheme==='dark' ? 'selected' : '' %>><%= __('Dark Mode') %>
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label fw-medium small">
+                                <%= __('Language') %>
+                            </label>
+                            <select name="language" class="form-select bg-light">
+                                <option value="en" <%=userLanguage==='en' ? 'selected' : '' %>><%= __('English') %>
+                                </option>
+                                <option value="hi" <%=userLanguage==='hi' ? 'selected' : '' %>><%= __('Hindi') %>
+                                </option>
+                                <option value="mr" <%=userLanguage==='mr' ? 'selected' : '' %>><%= __('Marathi') %>
+                                </option>
+                                <option value="gu" <%=userLanguage==='gu' ? 'selected' : '' %>><%= __('Gujarati') %>
+                                </option>
+                                <option value="fr" <%=userLanguage==='fr' ? 'selected' : '' %>><%= __('French') %>
+                                </option>
+                                <option value="de" <%=userLanguage==='de' ? 'selected' : '' %>><%= __('German') %>
+                                </option>
+                                <option value="es" <%=userLanguage==='es' ? 'selected' : '' %>><%= __('Spanish') %>
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn gradient-btn rounded-pill px-4 shadow-sm">
+                            <i class="bi bi-save me-1"></i>
+                            <%= __('Save Preferences') %>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Photo Modal -->
+<div class="modal fade glass-modal" id="photoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-bottom-0 pb-0">
+                <h5 class="modal-title fw-bold">Update Profile Photo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-4 text-center">
+                <form action="/user/photo" method="POST" enctype="multipart/form-data">
+                    <div class="mb-4 text-start">
+                        <label class="form-label fw-medium small text-muted">Select an image (Max 2MB)</label>
+                        <input class="form-control" type="file" name="profile_photo" accept="image/*" required>
+                    </div>
+                    <button type="submit" class="btn gradient-btn rounded-pill px-4 shadow-sm w-100 mb-2">Upload
+                        Photo</button>
+                </form>
+                <% if(userProfile.profile_photo) { %>
+                    <form action="/user/photo/remove" method="POST">
+                        <button type="submit" class="btn btn-outline-danger rounded-pill px-4 shadow-sm w-100">Remove
+                            Photo</button>
+                    </form>
+                    <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Location Modal -->
+<div class="modal fade glass-modal" id="locationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-bottom-0 pb-0">
+                <h5 class="modal-title fw-bold">Update Location</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/user/location" method="POST">
+                <div class="modal-body py-4">
+                    <label class="form-label fw-medium small text-muted">Your Location</label>
+                    <input type="text" name="location" class="form-control bg-light" placeholder="e.g. New York, USA"
+                        value="<%= userProfile.location || '' %>" required>
+                </div>
+                <div class="modal-footer border-top-0 pt-0">
+                    <button type="button" class="btn btn-light rounded-pill" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn gradient-btn rounded-pill px-4 shadow-sm">Save Location</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
